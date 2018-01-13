@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: 7нtech
+    database_user: root
+    database_password: null
+    mailer_transport: smtp
+    mailer_host: smtp.yandex.ru
+    mailer_user: pavelesmi@yandex.ru
+    mailer_password: Ctrnjh56ufpf
+    secret: ThisTokenIsNotSoSecretChangeIt
