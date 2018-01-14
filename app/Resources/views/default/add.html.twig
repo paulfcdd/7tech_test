@@ -1,0 +1,50 @@
+{% extends 'default/base.html.twig' %}
+
+{% form_theme articleForm with ':default/form:form_fields.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+
+        {% for flash_message in app.session.flashBag.get('error') %}
+            <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#article">
+                    Artykuł
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#category">
+                    Kategoria
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="article" class="tab-pane fade in active">
+                <h3>Dodanie nowego artykułu</h3>
+                {{ form_start(articleForm) }}
+                {{ form_end(articleForm) }}
+            </div>
+            <div id="category" class="tab-pane fade">
+                <h3>Dodanie nowej kategorii</h3>
+                <p>Some content in menu 1.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('node_modules/ckeditor/ckeditor.js') }}"></script>
+{% endblock %}

@@ -13,7 +13,7 @@ class SecurityController extends BaseController {
      * {@inheritdoc}
      */
     public function renderLogin(array $data) {
-        if('admin.login' === $this->get('request_stack')->getCurrentRequest()->attributes->get('_route')) {
+        if('user.login' === $this->get('request_stack')->getCurrentRequest()->attributes->get('_route')) {
             $template = 'default\login.html.twig';
 
         } else {
@@ -21,5 +21,10 @@ class SecurityController extends BaseController {
         }
 
         return $this->container->get('templating')->renderResponse($template, $data);
+    }
+
+    public function confirmedAction()
+    {
+        return $this->render(':default:confirm.html.twig');
     }
 }

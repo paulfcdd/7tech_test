@@ -1,6 +1,6 @@
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
-    prefix: /admin
+    prefix: /user
 
 fos_user_profile:
     resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
@@ -21,3 +21,7 @@ fos_user_change_password:
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
+
+fos_user_registration_confirmed:
+    path: /registration/confirmed
+    defaults: { _controller: AppBundle:Security:confirmed }

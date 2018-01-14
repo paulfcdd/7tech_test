@@ -2,3 +2,4 @@
 /var/
 /vendor/
 /web/node_modules/
+/app/config/parameters.yml

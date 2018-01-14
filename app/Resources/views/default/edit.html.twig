@@ -1,0 +1,29 @@
+{% extends 'default/base.html.twig' %}
+
+{% form_theme form with ':default/form:form_fields.html.twig' %}
+
+{% block content %}
+    <div class="container">
+
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+
+        {% for flash_message in app.session.flashBag.get('error') %}
+            <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+
+        {{ form_start(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('node_modules/ckeditor/ckeditor.js') }}"></script>
+{% endblock %}

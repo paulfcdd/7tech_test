@@ -1,0 +1,38 @@
+@dark-grey: #222222;
+@white: #FFFFFF;
+@blue: #337ab7;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
+}
+
+.wrapper {
+  display: table;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  background: #F5F7FA;
+  font-family: 'Raleway', sans-serif;
+
+  .list-toolbar {
+    text-decoration: none;
+    color: @white;
+  }
+  header {
+    .navbar {
+      border-radius: 0;
+    }
+  }
+  .content {
+    display: table-row;
+    height: 100%;
+  }
+
+  .footer {
+    height: 80px;
+  }
+}

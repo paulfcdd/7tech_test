@@ -1,0 +1,35 @@
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <div class="form-group">
+        <input class="form-control" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    </div>
+{%- endblock form_widget_simple -%}
+
+{%- block textarea_widget -%}
+    <div class="form-group">
+        <textarea {{ block('widget_attributes') }} class="form-control no-resize" cols="3" rows="3">{{ value }}</textarea>
+    </div>
+{%- endblock textarea_widget -%}
+
+{%- block button_widget -%}
+    {%- if label is not same as(false) and label is empty -%}
+        {%- if label_format is not empty -%}
+            {% set label = label_format|replace({
+                '%name%': name,
+                '%id%': id,
+            }) %}
+        {%- else -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+    {%- endif -%}
+    <button type="{{ type|default('button') }}"
+            class="btn btn-success"
+            {{ block('button_attributes') }}>
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    </button>
+{%- endblock button_widget -%}
+
+{%- block submit_widget -%}
+    {%- set type = type|default('submit') -%}
+    {{ block('button_widget') }}
+{%- endblock submit_widget -%}

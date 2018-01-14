@@ -1,0 +1,115 @@
+{% extends ':default:base.html.twig' %}
+
+{% block content %}
+    <div class="container" style="padding: 0">
+        <div class="row">
+            {% if articles is empty %}
+                <div class="col-sm-12">
+                    <h1 class="text-center">Brak artykułow do wyświetlania</h1>
+                </div>
+            {% else %}
+                <div class="col-sm-9">
+
+                    {% for article in articles %}
+                        <div class="panel panel-primary" id="article_{{ article.id }}">
+                            <div class="panel-heading clearfix">
+
+                                <h3 class="panel-title pull-left">
+                                    {{ article.title }}
+                                    <small><span class="fa fa-user"></span> {{ article.author }}</small>
+                                </h3>
+                                <div class="pull-right {% if user.id != article.author.id %}hidden{% endif %}">
+                                    <a href="{{ path('edit', {
+                                        'entity': 'article',
+                                        'id': article.id,
+                                    }) }}" class="list-toolbar">
+                                        <span class="fa fa-pencil"></span>
+                                    </a>
+                                    &nbsp;
+                                    <a href="#"
+                                       data-objectname="article"
+                                       data-objectid="{{ article.id }}"
+                                       class="list-toolbar delete">
+                                        <span class="fa fa-trash"></span>
+                                    </a>
+                                </div>
+
+
+                            </div>
+                            <div class="panel-body">
+                                {{ article.content | raw }}
+                            </div>
+                            <div class="panel-footer">
+                                <b>Data dodania: </b> {{ article.dateCreated | date('d.m.Y') }}
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                </div>
+                <div class="col-sm-3">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">
+                            <label>Autory</label>
+                        </div>
+                        <!-- List group -->
+                        <ul class="list-group">
+                            {% for singleUser in usersData  %}
+                                <li class="list-group-item">
+                                    {{ singleUser.author~' ('~singleUser.articles~')' }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $('.delete').on('click', function (e) {
+
+            e.preventDefault();
+
+            var objectName = $(this).data('objectname'),
+                objectId = $(this).data('objectid'),
+                url = '{{ path('delete') }}',
+                rowId = objectName + '_' + objectId;
+
+
+            swal({
+                title: "Usunąć wybrany objekt?",
+                text: "",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Usuń",
+                cancelButtonText: 'Anuluj',
+                closeOnConfirm: false
+            }, function () {
+                confirmButton = $('.confirm:button');
+                confirmButton.html('<img src="{{ asset('img/ajax-loader.gif') }}">');
+                $.ajax({
+                    url: url,
+                    data: {
+                        'entity': objectName,
+                        'id': objectId
+                    },
+                    method: 'post',
+                    success: function () {
+                        swal({
+                            title: 'Objekt został usunięty',
+                            text: '',
+                            type: 'success'
+                        }, function () {
+                            $('#' + rowId).remove();
+                        });
+
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
