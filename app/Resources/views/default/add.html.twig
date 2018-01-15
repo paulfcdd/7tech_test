@@ -1,6 +1,7 @@
 {% extends 'default/base.html.twig' %}
 
 {% form_theme articleForm with ':default/form:form_fields.html.twig' %}
+{% form_theme categoryForm with ':default/form:form_fields.html.twig' %}
 
 {% block content %}
     <div class="container">
@@ -39,7 +40,8 @@
             </div>
             <div id="category" class="tab-pane fade">
                 <h3>Dodanie nowej kategorii</h3>
-                <p>Some content in menu 1.</p>
+                {{ form_start(categoryForm) }}
+                {{ form_end(categoryForm) }}
             </div>
         </div>
     </div>

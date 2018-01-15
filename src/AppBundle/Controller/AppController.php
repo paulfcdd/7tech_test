@@ -4,6 +4,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Form\ArticleType;
+use AppBundle\Form\CategoryType;
 use AppBundle\Form\RegistrationType;
 use Doctrine\ORM\QueryBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -15,13 +16,15 @@ use AppBundle\Entity as Entity;
 
 class AppController extends Controller
 {
+
     /**
      * @Route("/", name="index")
      */
     public function indexAction() {
 
+        $em = $this->getDoctrine()->getManager();
         $articles = $this->getArticles([]);
-        $users = $this->getDoctrine()->getRepository(Entity\User::class)->findAll();
+        $users = $em->getRepository(Entity\User::class)->findAll();
         $userId = [];
 
         foreach ($users as $user) {
@@ -35,13 +38,36 @@ class AppController extends Controller
                 ->getDoctrine()
                 ->getRepository(Entity\Article::class)
                 ->findBy(['author' => $key]);
+
             $userId[$key]['articles'] = count($articlesCount);
+
         }
 
         return $this->render('default/index.html.twig', [
             'articles' => $articles,
             'usersData' => $userId
         ]);
+    }
+
+    /**
+     * @Route("/categories", name="categories")
+     */
+    public function categoriesListAction() {
+        $em = $this->getDoctrine()->getManager();
+        $categories = $em->getRepository(Entity\Category::class)->findAll();
+        $categoriesTree = [];
+        foreach ($categories as $category) {
+            if (!$category->getParent()) {
+                $categoriesTree[$category->getId()]['parent'] = $category->getName();
+                $categoriesTree[$category->getId()]['children'] = [];
+            }
+        }
+        $tree = $this->renderNestedTree($categories, $categoriesTree);
+
+        echo '<pre>';
+        print_r($tree);
+        echo '</pre>';
+        die;
     }
 
     /**
@@ -68,10 +94,18 @@ class AppController extends Controller
 
         $articleForm = $this->createForm(ArticleType::class)->handleRequest($request);
 
+        $categoryForm = $this->createForm(CategoryType::class)->handleRequest($request);
+
         if ($request->isMethod('POST')) {
             if ($articleForm->isSubmitted()) {
                 if ($articleForm->isValid()) {
                     $this->formSubmitter($articleForm);
+                }
+            }
+
+            if ($categoryForm->isSubmitted()) {
+                if ($categoryForm->isValid()) {
+                    $this->formSubmitter($categoryForm);
                 }
             }
         }
@@ -79,6 +113,7 @@ class AppController extends Controller
 
         return $this->render('default/add.html.twig', [
             'articleForm' => $articleForm->createView(),
+            'categoryForm' => $categoryForm->createView()
         ]);
     }
 
@@ -115,6 +150,7 @@ class AppController extends Controller
      * @Route("/delete", name="delete")
      */
     public function deleteAction(Http\Request $request) {
+
 
         $em = $this->getDoctrine()->getManager();
 
@@ -154,13 +190,11 @@ class AppController extends Controller
      */
     protected function entityFormBuilder($entity, $object)
     {
-
         $formName = 'AppBundle\Form\\' . ucfirst($entity) . 'Type';
 
         $form = $this->createForm($formName, $object);
 
         return $form;
-
     }
 
      /**
@@ -204,5 +238,37 @@ class AppController extends Controller
             $this->addFlash('error', $exception->getMessage());
         }
 
+    }
+
+    /**
+     * @param array $categories
+     * @param array $categoriesTree
+     * @return array
+     */
+    private function renderNestedTree(array $categories, array $categoriesTree) {
+
+        //TODO: Ta metoda buduje drzewo kategorii używajac rekurencji
+
+        /** @var Entity\Category $category */
+        foreach ($categories as $category) {
+
+            if ($category->getParent()) {
+                if(array_key_exists($category->getParent()->getId(), $categoriesTree)) {
+                    $parent = $category->getParent();
+                    $categoriesTree[$parent->getId()]['children'][$category->getId()]['parent'] = $category->getName();
+                    $categoriesTree[$parent->getId()]['children'][$category->getId()]['children'] = [];
+                }
+            }
+
+        }
+
+        foreach ($categoriesTree as $key => $treeItem) {
+            if (!empty($treeItem['children'])) {
+                $children = $this->renderNestedTree($categories, $treeItem['children']);
+                $categoriesTree[$key]['children'] = $children;
+            }
+        }
+
+        return $categoriesTree;
     }
 }

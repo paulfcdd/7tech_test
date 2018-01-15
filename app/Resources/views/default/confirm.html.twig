@@ -1,5 +1,14 @@
 {% extends 'default/base.html.twig' %}
 
 {% block content %}
-    <p>Hasło zostało założone</p>
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-sm-12">
+                <h3>Konto zostało utworzone</h3>
+                <a href="{{ path('add') }}" class="btn btn-lg btn-success">
+                    Dodać artykiuł/kategorie
+                </a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -16,31 +16,31 @@
 
                                 <h3 class="panel-title pull-left">
                                     {{ article.title }}
-                                    <small><span class="fa fa-user"></span> {{ article.author }}</small>
                                 </h3>
-                                <div class="pull-right {% if user.id != article.author.id %}hidden{% endif %}">
-                                    <a href="{{ path('edit', {
-                                        'entity': 'article',
-                                        'id': article.id,
-                                    }) }}" class="list-toolbar">
-                                        <span class="fa fa-pencil"></span>
-                                    </a>
-                                    &nbsp;
-                                    <a href="#"
-                                       data-objectname="article"
-                                       data-objectid="{{ article.id }}"
-                                       class="list-toolbar delete">
-                                        <span class="fa fa-trash"></span>
-                                    </a>
-                                </div>
-
+                                {% if user is not null and user.id == article.author.id %}
+                                    <div class="pull-right">
+                                        <a href="{{ path('edit', {
+                                            'entity': 'article',
+                                            'id': article.id,
+                                        }) }}" class="list-toolbar">
+                                            <span class="fa fa-pencil"></span>
+                                        </a>
+                                        &nbsp;
+                                        <a href="#"
+                                           data-objectname="article"
+                                           data-objectid="{{ article.id }}"
+                                           class="list-toolbar delete">
+                                            <span class="fa fa-trash"></span>
+                                        </a>
+                                    </div>
+                                {% endif %}
 
                             </div>
                             <div class="panel-body">
                                 {{ article.content | raw }}
                             </div>
                             <div class="panel-footer">
-                                <b>Data dodania: </b> {{ article.dateCreated | date('d.m.Y') }}
+                                <b>Dodano: </b> {{ article.dateCreated | date('d.m.Y')~' | '~article.dateCreated | date('H:i')~' | '~article.author}}
                             </div>
                         </div>
 
@@ -54,7 +54,7 @@
                         </div>
                         <!-- List group -->
                         <ul class="list-group">
-                            {% for singleUser in usersData  %}
+                            {% for singleUser in usersData %}
                                 <li class="list-group-item">
                                     {{ singleUser.author~' ('~singleUser.articles~')' }}
                                 </li>

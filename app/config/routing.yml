@@ -23,5 +23,4 @@ app:
     type: annotation
 
 fos_user_registration_confirmed:
-    path: /registration/confirmed
-    defaults: { _controller: AppBundle:Security:confirmed }
+    path: /user/add
