@@ -1,6 +1,6 @@
 How to install project
 
-1) Clone repository to Your working directory - `git clone git@github.com:paulfcdd/dkj96.ru.git`
+1) Clone repository to Your working directory - `git clone git@github.com:paulfcdd/7tech_test.git`
 
 2) Go to project directory and run `./install.sh`, next follow the instructions.
 
