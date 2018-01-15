@@ -226,6 +226,7 @@ class AppController extends Controller
             $categories = $formData->getCategories();
             foreach ($categories as $category) {
                 $formData->addCategory($category);
+                $category->addArticle($formData);
             }
         }
 
