@@ -1,6 +1,8 @@
-Порядок установки проекта
-1) выполнить команду `git clone git@github.com:paulfcdd/dkj96.ru.git` либо же
-распаковать zip-архив в web-директорию сайта
+How to install project
 
-2) Зайти в директорию проекта и запустить файл `install.sh`. 
-В процессе установки понадобится ввести данные для соединения с базой даннх
+1) Clone repository to Your working directory - `git clone git@github.com:paulfcdd/dkj96.ru.git`
+
+2) Go to project directory and run `./install.sh`, next follow the instructions.
+
+3) Database dump is located in `bin/dump.sql`. If You will select `Import database` during installation,
+installator will be use this file
