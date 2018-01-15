@@ -3,7 +3,9 @@
 
 namespace AppBundle\Form;
 use AppBundle\Entity\Article;
+use AppBundle\Entity\Category;
 use AppBundle\Form\Type\CKeditorType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -27,6 +29,12 @@ class ArticleType extends AbstractType
             ])
             ->add('content', CKeditorType::class, [
                 'label' => 'Zawartość artykułu'
+            ])
+            ->add('categories', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'expanded' => true,
+                'multiple' => true
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Zapisz'

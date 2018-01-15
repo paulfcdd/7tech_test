@@ -223,6 +223,10 @@ class AppController extends Controller
         //Set author to object if it is an Article
         if ($formData instanceof Entity\Article) {
             $formData->setAuthor($this->getUser());
+            $categories = $formData->getCategories();
+            foreach ($categories as $category) {
+                $formData->addCategory($category);
+            }
         }
 
         //Check if requested data is in DB or not

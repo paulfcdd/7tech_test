@@ -3,6 +3,7 @@
 
 namespace AppBundle\Entity;
 use AppBundle\Entity\Traits\DateTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -40,6 +41,16 @@ class Article
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     protected $author;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Category", mappedBy="articles")
+     */
+    private $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -106,4 +117,37 @@ class Article
         return $this;
     }
 
+    /**
+     * @param Category $category
+     * @return Article
+     */
+    public function addCategory(Category $category) {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->addArticle($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCategories(){
+        return $this->categories;
+    }
+
+    /**
+     * @param Category $category
+     * @return Article
+     */
+    public function removeCategory(Category $category) {
+
+        if ($this->categories->contains($category)){
+            $this->categories->remove($category);
+            $category->removeArticle($this);
+        }
+
+        return $this;
+    }
 }

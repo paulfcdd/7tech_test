@@ -11,6 +11,7 @@
                 <div class="col-sm-9">
 
                     {% for article in articles %}
+
                         <div class="panel panel-primary" id="article_{{ article.id }}">
                             <div class="panel-heading clearfix">
 
@@ -38,6 +39,11 @@
                             </div>
                             <div class="panel-body">
                                 {{ article.content | raw }}
+
+                                <label>Kategorie artykułu:</label>
+                                {% for category in article.categories %}
+                                    {{ category.name~' | ' }}
+                                {% endfor %}
                             </div>
                             <div class="panel-footer">
                                 <b>Dodano: </b> {{ article.dateCreated | date('d.m.Y')~' | '~article.dateCreated | date('H:i')~' | '~article.author}}
